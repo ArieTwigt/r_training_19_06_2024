@@ -1,0 +1,93 @@
+# Basics
+
+Basics of the R syntax
+
+```{r}
+a <- 10
+```
+
+```{r}
+a
+```
+
+Multiple values
+
+Creating the `numbers` variable.
+
+```{r}
+numbers <- c(4,5,2,9,8,3)
+```
+
+```{r}
+numbers
+```
+
+```{r}
+print(numbers)
+```
+
+## 
+
+## Selection
+
+Selecting values from a vector.
+
+```{r}
+numbers[3]
+```
+
+```{r}
+numbers[1:4]
+```
+
+```{r}
+numbers[c(2,4,6)]
+```
+
+```{r}
+numbers[7]
+```
+
+## Data types
+
+```{r}
+name <- "arie"
+```
+
+```{r}
+as.character(numbers)
+```
+
+# Calculations
+
+## Basic calculations
+
+```{r}
+numbers * -5
+```
+
+## Mathematical functions
+
+```{r}
+mean(numbers)
+```
+
+Summarization of the vector
+
+```{r}
+summary(numbers)
+```
+
+Plotting in R
+
+```{r}
+plot(numbers, type="l", lwd=3, col="blue",
+     main="My Plot", xlab="Age", ylab="Amount")
+
+```
+
+\
+
+```{r}
+barplot(numbers)
+```
