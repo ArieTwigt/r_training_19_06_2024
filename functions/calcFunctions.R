@@ -1,4 +1,9 @@
 calcCircle <- function(diameter){
+  if (diameter < 0 ){
+    warning("Cannot be negatieve")
+    return(NA)
+  }
+  
   radius <- diameter / 2
   size <- (radius ^ 2) * pi
   return(size)

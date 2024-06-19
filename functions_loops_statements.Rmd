@@ -53,3 +53,45 @@ circle_sizes
 ```{r}
 assign("name", "arie")
 ```
+
+## Conditional statements
+
+```{r}
+age <- 17
+password <- "wijn"
+
+
+if (age > 18){
+  print("🍻") 
+} else if(password == "bier") {
+  print("Je weet het wachtwoord")
+} else {
+  print("Helaas")
+}
+```
+
+```{r}
+calcCircle(10)
+```
+
+```{r}
+# vector with diameters
+diameters <- c(10, 50, 3, 12, 1, 4, 40)
+
+# empty vector for sizes
+sizes_higher_50 <- numeric(0)
+sizes_lower_50 <- numeric(0)
+
+# iterate over the vector with diameters
+for (diameter in diameters){
+  # calculate the size of the circle
+  size <- calcCircle(diameter)
+  
+  # check if the size is higher than 50
+  if (size > 50){
+    sizes_higher_50 <- append(sizes_higher_50, size)
+  } else {
+    sizes_lower_50 <- append(sizes_lower_50, size)
+  }
+}
+```
