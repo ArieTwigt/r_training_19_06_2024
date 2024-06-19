@@ -1,0 +1,55 @@
+# Functions
+
+Define the function
+
+```{r}
+source("functions/calcFunctions.R")
+```
+
+Use the function
+
+```{r}
+calcCircle(20)
+```
+
+```{r}
+calcPythagoras(10, 20)
+```
+
+```{r}
+diameters <- c(10, 20, 30, 40, 50, 60, 70)
+
+# initiate an empty numeric vector
+circle_sizes <- numeric(0)
+
+for(diameter in diameters){
+  size <- calcCircle(diameter)
+  assign(paste0("size", diameter), size)
+  circle_sizes <- append(circle_sizes, size)
+}
+
+circle_sizes
+```
+
+Based on postions
+
+```{r}
+
+diameters <- c(10, 20, 30, 40, 50, 60, 70)
+
+# initiate an empty numeric vector
+circle_sizes <- numeric(0)
+
+for(i in 1:length(diameters)){
+  print(i)
+  size <- calcCircle(diameters[i])
+  assign(paste0("size", i), size)
+  circle_sizes <- append(circle_sizes, size)
+}
+
+circle_sizes
+```
+
+```{r}
+assign("name", "arie")
+```

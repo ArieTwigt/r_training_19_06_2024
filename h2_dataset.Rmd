@@ -1,0 +1,128 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+
+# Importing the dataset
+
+```{r}
+library(readr)
+data <- read_csv("data/german_data_clean.csv")
+```
+
+Show the entire data frame
+
+```{r}
+data
+```
+
+Selecting a column from a DataFrame
+
+```{r}
+mean(data$age_years)
+```
+
+Overview of the DataFrame
+
+```{r}
+str(data)
+```
+
+Statistical overview
+
+```{r}
+summary(data)
+```
+
+```{r}
+summary(data$credit_amount)
+```
+
+# Filtering the DataFrame
+
+```{r}
+data[5:10,3:10]
+```
+
+Based on a condition
+
+```{r}
+
+
+
+data_age_under_30 <- data[data$age_years < 30,]
+data_age_over_30 <- data[data$age_years >= 30,]
+```
+
+Check the average credit amount for these groups
+
+```{r}
+mean(data_age_under_30$credit_amount)
+```
+
+```{r}
+mean(data_age_over_30$credit_amount)
+```
+
+Check the different loan purposes
+
+```{r}
+unique(data$purpose)
+```
+
+```{r}
+table(data$purpose)
+```
+
+```{r}
+barplot(table(data$purpose), col="red")
+```
+
+## 
+
+```{r}
+unique_purposes <- unique(data$purpose)
+length(unique_purposes)
+```
+
+```{r}
+table(data$purpose)
+```
+
+Create a fixed order
+
+```{r}
+fixed_order <- c("business", "retraining", "education", "furniture/equipment", "car (new)", "car (used)", "radio/television", "repairs", "domestic appliances", "others")
+```
+
+```{r}
+length(fixed_order)
+```
+
+```{r}
+amounts <- table(factor(data$purpose, levels=fixed_order))
+barplot(amounts, horiz=TRUE, col="#467ba0")
+
+```
+
+## Creating categories
+
+Categories for loans
+
+```{r}
+data$loan_duration <- ifelse(data$duration_months <= 12, "short", "long")
+table(data$loan_duration)
+```
+
+Categories for ages
+
+```{r}
+data$age_class <- cut(data$age_years, 
+                      breaks=c(18, 25, 50, 65, 999),
+                      labels=c("young", "adult", "senior", "retired"))
+```
+
+```{r}
+barplot(table(data$age_class))
+```

@@ -1,0 +1,7 @@
+```{r}
+source("functions/calcFunctions.R")
+```
+
+```{r}
+calcCircle(40)
+```

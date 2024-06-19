@@ -1,0 +1,95 @@
+Load the required modules.
+
+```{r}
+library(dplyr)
+library(readr)
+```
+
+Import the dataset
+
+```{r}
+data <- read_csv("data/german_data_clean.csv")
+```
+
+```{r}
+older_30_2 <- data %>%
+  filter(age_years >= 30) %>%
+  select(age_years, personal_status_sex, credit_amount) %>%
+  arrange(age_years)
+
+head(older_30_2)
+```
+
+```{r}
+selected_purposes <- c("car (new)", "radio/television", "furniture/equipment")
+
+subset_1 <- data %>%
+  select(age_years, duration_months, credit_amount, purpose, personal_status_sex, response) %>%
+  filter(personal_status_sex == "male   : divorced/separated") %>%
+  filter(age_years >= 18) %>%
+  filter(purpose %in% selected_purposes) %>%
+  arrange(desc(credit_amount))
+```
+
+Assignment:
+
+-   Older than **50**
+
+-   Only loans for cars
+
+-   Duration for **15 months or more**
+
+-   Sorted by **credit amount** (high to low)
+
+-   Only the columns:
+
+    -   `credit_amount`
+
+    -   `age_years`
+
+    -   `purpose`
+
+    -   `duration_months`
+
+```{r}
+# loans for cars
+car_purposes <- c("car (new)", "car (used)")
+
+subset_1 <- data %>%
+  filter(age_years > 50) %>%
+  filter(purpose %in% car_purposes) %>%
+  filter(duration_months > 15) %>%
+  arrange(desc(credit_amount)) %>% 
+  select(credit_amount, age_years, purpose, duration_months) %>%
+  rename(age = age_years)
+
+
+subset_1
+
+
+```
+
+```{r}
+subset_1
+```
+
+## Group and aggregate
+
+
+```{r}
+subset_2 <- data %>%
+  filter(age_years > 50) %>%
+  select(purpose, credit_amount, duration_months) %>%
+  group_by(purpose) %>%
+  summarise(average_amount = mean(credit_amount),
+            total_amount = sum(credit_amount),
+            max_duration = max(duration_months))
+
+subset_2
+```
+
+```{r}
+barplot(height = subset_2$average_amount, 
+        names.arg=subset_2$purpose)
+```
+
