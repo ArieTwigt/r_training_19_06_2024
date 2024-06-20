@@ -2,11 +2,10 @@
 title: "Analyse dienstenprijzen"
 author: "Arie Twigt"
 date: "`r Sys.Date()`"
-output: word_document
+output: 
+  word_document:
 ---
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(warning=FALSE, message = FALSE)
-```
+
 
 # Inleiding
 
@@ -25,14 +24,30 @@ library(dplyr)
 library(zoo)
 ```
 
+
+
+
 ## Importeren bronbestand
 
 Load the csv-file.
+
+Transactions:
 
 ```{r}
 diensten <- read_delim("data/diensten.csv", 
     delim = ";", escape_double = FALSE, trim_ws = TRUE)
 ```
+
+
+Load the meta-data:
+
+```{r}
+metadata_diensten <- read_delim("data/metadata_diensten.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE, 
+    skip = 11)
+```
+
+
 
 ## Data preparation
 
@@ -46,6 +61,8 @@ diensten <- read_delim("data/diensten.csv",
 
     -   Convert to to numeric data types.
 
+
+
 ```{r}
 
 numeric_cols <- c("Prijsindex_1", "Kwartaalmutaties_2", "Jaarmutaties_3")
@@ -56,5 +73,13 @@ diensten_clean <- diensten %>%
   filter(!is.na(Kwartaalmutaties_2)) %>%
   mutate(Perioden = as.Date(as.yearqtr(Perioden, format = "%YKW0%q"))) %>%
   mutate(jaar = format(Perioden, "%Y")) %>%
-  mutate(kwartaal = quarters(Perioden))
+  mutate(kwartaal = quarters(Perioden)) %>%
+  mutate(titel = metadata_diensten$Title[match(CPA2008, metadata_diensten$Key)]) %>%
+  mutate(titel = gsub("[[:digit:]]+ ", "", titel)) %>%
+  filter(titel != "Dienstenprijsindex (DPI)") %>%
+  rename_all(.funs = funs(tolower(.))) %>%
+  select(-c("cpa2008", "jaarmutaties_3")) %>%
+  rename(prijsindex = prijsindex_1) %>%
+  rename(kwartaalmutaties = kwartaalmutaties_2) %>%
+  select(id, jaar, kwartaal, perioden, titel, prijsindex, kwartaalmutaties)
 ```
