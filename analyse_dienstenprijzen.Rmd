@@ -1,0 +1,60 @@
+---
+title: "Analyse dienstenprijzen"
+author: "Arie Twigt"
+date: "`r Sys.Date()`"
+output: word_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message = FALSE)
+```
+
+# Inleiding
+
+Dit is een analyse van de dienstenprijzen.
+
+# Analyse
+
+## Libraries importeren
+
+
+
+
+```{r}
+library(readr)
+library(dplyr)
+library(zoo)
+```
+
+## Importeren bronbestand
+
+Load the csv-file.
+
+```{r}
+diensten <- read_delim("data/diensten.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+```
+
+## Data preparation
+
+-   Deal with the different levels. We have quarterly and yearly.
+
+    -   Remove the yearly rows
+
+-   Some rows contain NA values. These can be removed.
+
+-   The columns containing the prices are characters.
+
+    -   Convert to to numeric data types.
+
+```{r}
+
+numeric_cols <- c("Prijsindex_1", "Kwartaalmutaties_2", "Jaarmutaties_3")
+
+diensten_clean <- diensten %>%
+  mutate(ID = as.integer(ID)) %>%
+  mutate_at(numeric_cols, funs(as.numeric)) %>%
+  filter(!is.na(Kwartaalmutaties_2)) %>%
+  mutate(Perioden = as.Date(as.yearqtr(Perioden, format = "%YKW0%q"))) %>%
+  mutate(jaar = format(Perioden, "%Y")) %>%
+  mutate(kwartaal = quarters(Perioden))
+```
